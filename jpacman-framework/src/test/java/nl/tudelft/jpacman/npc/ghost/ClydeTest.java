@@ -11,6 +11,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static nl.tudelft.jpacman.board.Direction.*;
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ClydeTest {
@@ -28,9 +30,9 @@ public class ClydeTest {
     public void distanceGreaterThan8AndPathIsBlockedTest() {
         // build a level
         List<String> map = Arrays.asList(
-            "############",
-            "#C#       P#",
-            "############"
+            "##############",
+            "#C#         P#",
+            "##############"
         );
 
         Level level = ghostMapParser.parseMap(map);
@@ -42,4 +44,92 @@ public class ClydeTest {
         //assert direction.equals(Optional.of(Direction.EAST));
         assertEquals(Optional.empty(), direction);
     }
+
+    @Test
+    public void distanceLesserThan8AndPathIsBlockedTest() {
+        List<String> map = Arrays.asList(
+            "##########",
+            "#C#     P#",
+            "##########"
+        );
+
+        Level level = ghostMapParser.parseMap(map);
+        Player player = playerFactory.createPacMan();
+        level.registerPlayer(player);
+
+        Clyde clyde = Navigation.findUnitInBoard(Clyde.class, level.getBoard());
+        Optional<Direction> direction = clyde.nextAiMove();
+
+        assertTrue(
+            direction.equals(Optional.empty())
+        );
+    }
+
+    @Test
+    public void distanceLesserThan8AndPathIsMultipleTest() {
+        List<String> map = Arrays.asList(
+            "# ########",
+            "#C      P#",
+            "# ########"
+        );
+
+        Level level = ghostMapParser.parseMap(map);
+        Player player = playerFactory.createPacMan();
+        level.registerPlayer(player);
+
+        Clyde clyde = Navigation.findUnitInBoard(Clyde.class, level.getBoard());
+        Optional<Direction> direction = clyde.nextAiMove();
+        System.out.println(direction);
+        assertTrue(
+                direction.equals(Optional.of(NORTH))||
+                direction.equals(Optional.of(SOUTH))
+        );
+    }
+
+    @Test
+    public void distanceLesserThan8AndPathIsFreeTest() {
+        List<String> map = Arrays.asList(
+            "# ########",
+            " C      P#",
+            "# ########"
+        );
+
+        Level level = ghostMapParser.parseMap(map);
+        Player player = playerFactory.createPacMan();
+        level.registerPlayer(player);
+
+        Clyde clyde = Navigation.findUnitInBoard(Clyde.class, level.getBoard());
+        Optional<Direction> direction = clyde.nextAiMove();
+
+        assertTrue(
+            direction.equals(Optional.of(WEST)) ||
+            direction.equals(Optional.of(NORTH))||
+            direction.equals(Optional.of(SOUTH))
+        );
+    }
+
+    @Test
+    public void distanceIsEqualTo8AndPathIsFreeTest() {
+        List<String> map = Arrays.asList(
+            "# ##########",
+            " C        P#",
+            "# ##########"
+        );
+
+        Level level = ghostMapParser.parseMap(map);
+        Player player = playerFactory.createPacMan();
+        level.registerPlayer(player);
+
+        Clyde clyde = Navigation.findUnitInBoard(Clyde.class, level.getBoard());
+        Optional<Direction> direction = clyde.nextAiMove();
+        System.out.println(direction);
+        assertTrue(
+            direction.equals(Optional.of(WEST)) ||
+                direction.equals(Optional.of(NORTH))||
+                direction.equals(Optional.of(SOUTH))||
+                direction.equals(Optional.of(EAST))
+        );
+    }
+
+
 }
