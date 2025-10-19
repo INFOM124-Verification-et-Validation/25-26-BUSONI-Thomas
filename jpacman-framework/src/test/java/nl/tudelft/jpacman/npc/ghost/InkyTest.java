@@ -111,10 +111,48 @@ public class InkyTest {
         }
 
         assertFalse(x==4 && y==2);
-
     }
 
     // 3/3 BAD WEATHER
+    /*
+     * We test on this map if Inky sends a correct answer when he doesn't have any path until the 2 cases in front of Pacman
+     * Blinky : (2,2)
+     * PacMan : (4,4) who looks southward. So the two cases in direction of PacMan is (4,2)
+     * Inky : (7,6)
+     * Resuslt : Inky is supposed to send a path equals to "empty"
+     * */
+    @Test
+    public void InkyDoenstFoundAnyPathUntilPacManOKTest() {
+        List<String> map = Arrays.asList(
+            "#########",
+            "##C  ## #",
+            "#    #  #",// <=> "# B     #",
+            "#  # ####",
+            "#  #P####",
+            "#  ######",
+            "####### #",// <=> "#      I#",
+            "#########"
+        );
+
+        Level level = ghostMapParser.parseMap(map);
+        Player player = playerFactory.createPacMan();
+        player.setDirection(NORTH);
+        level.registerPlayer(player);
+
+        //add Blinky tanks to code because I can't put is manually on the map
+        Ghost ghostFactoryBlinky = ghostFactory.createBlinky();
+        Square squareBlinky = level.getBoard().squareAt(2,2);
+        ghostFactoryBlinky.occupy(squareBlinky);
+
+        //add inky tanks to code because I can't put is manually on the map
+        Ghost ghostFactoryInky = ghostFactory.createInky();
+        Square squareInky = level.getBoard().squareAt(7,6);
+        ghostFactoryInky.occupy(squareInky);
+
+        Optional<Direction> direction = ghostFactoryInky.nextAiMove();
+
+        assertEquals(Optional.empty(), direction);
+    }
 
     // 1/2 GOOD WEATHER
     /*
