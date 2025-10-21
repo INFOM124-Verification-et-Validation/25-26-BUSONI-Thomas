@@ -5,7 +5,6 @@ import nl.tudelft.jpacman.board.Direction;
 import nl.tudelft.jpacman.level.*;
 import nl.tudelft.jpacman.sprite.PacManSprites;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeEach;
 
 import java.util.Arrays;
 import java.util.List;
@@ -15,7 +14,7 @@ import static nl.tudelft.jpacman.board.Direction.*;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class ClydeTest {
+public class ClydeTest2 {
 
     private PacManSprites pacManSprites =  new PacManSprites();
 
