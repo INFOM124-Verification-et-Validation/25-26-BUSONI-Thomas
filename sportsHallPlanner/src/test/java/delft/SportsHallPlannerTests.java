@@ -34,6 +34,7 @@ class SportsHallPlannerTests {
     private SportsHall sportsHall3 = new SportsHall(properties3, fields3);
 
 
+
     //——————————————————————————————————————————————————————————————————————————————
     //————————————————————— specification-based testing ————————————————————————————
     //——————————————————————————————————————————————————————————————————————————————
@@ -91,7 +92,89 @@ class SportsHallPlannerTests {
     //—————————————————————————— structural testing ————————————————————————————————
     //——————————————————————————————————————————————————————————————————————————————
 
+    @Test
+    void duplicateHallsInTheListInInputsForPlanHallTest() {
+        sportsHall1.fields.put(TENNIS, 3);
+        sportsHall1.properties.add(CLOSE_PUBLIC_TRANSPORT);
+        sportsHall2.fields.put(TENNIS, 3);
+        sportsHall2.properties.add(CLOSE_PUBLIC_TRANSPORT);
+        halls.add(sportsHall1);
+        halls.add(sportsHall2);
 
+        Request request1 = new Request(new HashSet<>(), TENNIS, 2);
+        requests.add(request1);
+        assertThrows(IllegalArgumentException.class, () -> planHalls(requests, halls));
+    }
+
+    @Test
+    void requestsIsEmptyInInputsForPlanHallsTest() {
+        sportsHall1.fields.put(TENNIS, 3);
+        sportsHall1.properties.add(CLOSE_PUBLIC_TRANSPORT);
+        halls.add(sportsHall1);
+
+        Map<SportsHall, Request> result = planHalls(requests, halls);
+        assertEquals(0, (planHalls(requests, halls)).size());
+        assertEquals(result, planHalls(requests, halls));
+    }
+
+    @Test
+    void noHallIsAdaptedForRequestsForHallsTest() {
+        sportsHall1.fields.put(TENNIS, 3);
+        sportsHall1.properties.add(CLOSE_PUBLIC_TRANSPORT);
+
+        sportsHall2.fields.put(VOLLEYBALL, 1);
+        sportsHall2.properties.add(HAS_RESTAURANT);
+        sportsHall2.properties.add(NEAR_CITY_CENTRE);
+
+        halls.add(sportsHall2);
+        halls.add(sportsHall1);
+
+        Request request1 = new Request(new HashSet<>(), BASKETBALL, 2);
+        Request request2 = new Request(new HashSet<>(), VOLLEYBALL, 2);
+        requests.add(request1);
+        requests.add(request2);
+
+        assertNull((planHalls(requests, halls)));
+    }
+
+    @Test
+    void HallsAreCorrectForRequestsAndInGoodOrderInOutputForHallsTest() {
+        sportsHall1.fields.put(BASKETBALL, 3);
+        sportsHall1.properties.add(CLOSE_PUBLIC_TRANSPORT);
+
+        sportsHall2.fields.put(VOLLEYBALL, 5);
+        sportsHall2.properties.add(NEAR_CITY_CENTRE);
+
+        sportsHall3.fields.put(VOLLEYBALL, 3);
+        sportsHall3.properties.add(HAS_RESTAURANT);
+        sportsHall3.properties.add(NEAR_CITY_CENTRE);
+
+        halls.add(sportsHall2);
+        halls.add(sportsHall1);
+        halls.add(sportsHall3);
+
+
+        Request request1 = new Request(new HashSet<>(), BASKETBALL, 2);
+        Request request2 = new Request(new HashSet<>(), VOLLEYBALL, 2);
+
+        properties3.add(HAS_RESTAURANT);
+        Request request3 = new Request(properties3, VOLLEYBALL, 2);
+
+        requests.add(request1);
+        requests.add(request3);
+        requests.add(request2);
+
+        Map<SportsHall, Request> result = new  HashMap<>();
+        result.put(sportsHall3, request3);
+        result.put(sportsHall2, request2);
+        result.put(sportsHall1, request1);
+
+        Map<SportsHall, Request> planHalls = (planHalls(requests, halls));
+
+
+        assertEquals(3, (planHalls).size());
+        assertTrue(result.equals(planHalls));
+    }
 
 
 
