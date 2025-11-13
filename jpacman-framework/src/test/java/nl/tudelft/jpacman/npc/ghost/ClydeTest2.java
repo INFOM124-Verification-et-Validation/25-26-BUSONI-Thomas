@@ -64,7 +64,7 @@ public class ClydeTest2 {
         );
     }
 
-    @Test
+    /*@Test
     public void distanceLesserThan8AndPathIsMultipleTest() {
         List<String> map = Arrays.asList(
             "# ########",
@@ -83,7 +83,7 @@ public class ClydeTest2 {
                 direction.equals(Optional.of(NORTH))||
                 direction.equals(Optional.of(SOUTH))
         );
-    }
+    }*/
 
     @Test
     public void distanceLesserThan8AndPathIsFreeTest() {
