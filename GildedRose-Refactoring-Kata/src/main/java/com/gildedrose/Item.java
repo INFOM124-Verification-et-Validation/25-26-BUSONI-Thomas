@@ -18,4 +18,15 @@ public class Item {
    public String toString() {
         return this.name + ", " + this.sellIn + ", " + this.quality;
     }
+
+    public void decrementQuality(){
+        this.quality--;
+    }
+    public void decrementSellIn(){
+        this.sellIn--;
+    }
+    public void incrementQuality(){
+        this.quality++;
+    }
+
 }
